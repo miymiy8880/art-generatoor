@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Canvas: Generative Art Studio</title>
+    <style>
+        body {
+            background-color: #0d0d11;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Courier New', Courier, monospace;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+            letter-spacing: 3px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* The frame holding our dynamic canvas artwork */
+        .canvas-container {
+            position: relative;
+            background-color: #000;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        canvas {
+            display: block;
+            border-radius: 6px;
+            background-color: #050508;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        button {
+            padding: 12px 28px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: inherit;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        .btn-generate {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .btn-generate:hover {
+            background-color: #ddd;
+            transform: translateY(-1px);
+        }
+
+        .btn-download {
+            background-color: #1a1a24;
+            color: #a5a5b5;
+            border: 1px solid #333344;
+        }
+
+        .btn-download:hover {
+            background-color: #252533;
+            color: #fff;
+            border-color: #555566;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>DIGITAL CANVAS</h1>
+    <p>Algorithmic Geometry Studio</p>
+    
+    <div class="canvas-container">
+        <canvas id="artCanvas" width="600" height="600"></canvas>
+    </div>
+    
+    <div class="controls">
+        <button class="btn-generate" onclick="generateArt()">Generate Art</button>
+        <button class="btn-download" onclick="downloadArt()">Save Wallpaper</button>
+    </div>
+
+    <script>
+        // High-end cinematic color palettes
+        const PALETTES = [
+            ["#ff0055", "#00ffcc", "#9900ff", "#ff9900"], // Cyberpunk Neon
+            ["#11998e", "#38ef7d", "#00f2fe", "#4facfe"], // Fresh Oceanic Auras
+            ["#f12711", "#f5af19", "#e94057", "#8a2387"], // Solar Eclipse Flares
+            ["#2c3e50", "#3498db", "#ecf0f1", "#e74c3c"], // Minimalistic Structure
+            ["#000000", "#ffffff", "#888888", "#ff3333"]  // Stark Bauhaus Noir
+        ];
+
+        function generateArt() {
+            const canvas = document.getElementById("artCanvas");
+            const ctx = canvas.getContext("2d");
+            
+            // Clear canvas entirely
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Pick a core design palette completely at random
+            const palette = PALETTES[Math.floor(Math.random() * PALETTES.length)];
+            
+            // Fill background with a very deep dark tone
+            ctx.fillStyle = "#050508";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Step 1: Draw a complex network of ambient intersecting background lines
+            const linesCount = 15 + Math.floor(Math.random() * 20);
+            for(let i = 0; i < linesCount; i++) {
+                ctx.strokeStyle = palette[Math.floor(Math.random() * palette.length)];
+                ctx.lineWidth = Math.random() * 2;
+                ctx.globalAlpha = Math.random() * 0.15; // Barely visible translucency
+                
+                ctx.beginPath();
+                ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.stroke();
+            }
+
+            // Step 2: Draw layered, overlapping translucent geometric circles
+            const shapeCount = 20 + Math.floor(Math.random() * 30);
+            for (let i = 0; i < shapeCount; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const radius = 10 + (Math.random() * 120);
+                
+                // Assign color and soft transparency so layers blend like real watercolor paint
+                ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
+                ctx.globalAlpha = 0.1 + (Math.random() * 0.35); 
+                
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // 30% chance a circle gets an accented sharp white perimeter ring
+                if(Math.random() < 0.30) {
+                    ctx.strokeStyle = "#ffffff";
+                    ctx.lineWidth = 1;
+                    ctx.globalAlpha = 0.2;
+                    ctx.stroke();
+                }
+            }
+
+            // Step 3: Draw a striking, centralized solid focal point element
+            ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
+            ctx.globalAlpha = 0.8;
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, 40 + Math.random() * 60, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Give focal point a crisp ring line
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2;
+            ctx.globalAlpha = 0.4;
+            ctx.stroke();
+        }
+
+        function downloadArt() {
+            const canvas = document.getElementById("artCanvas");
+            const link = document.createElement('a');
+            link.download = 'digital-canvas-artwork.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Generate our first artistic canvas immediately when landing on screen
+        generateArt();
+    </script>
+</body>
+</html>
