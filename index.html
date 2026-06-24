@@ -1,1 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Canvas: Math & Art Studio</title>
+    <style>
+        body {
+            background-color: #0a0a0d;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: 'Courier New', Courier, monospace;
+            color: #fff;
+            overflow-y: auto;
+        }
+
+        .workspace {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            max-width: 640px;
+            width: 100%;
+        }
+
+        h1 {
+            margin: 0;
+            letter-spacing: 3px;
+            font-size: 1.6rem;
+            text-align: center;
+        }
+
+        .canvas-container {
+            background-color: #000;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        canvas {
+            display: block;
+            border-radius: 6px;
+            background-color: #050508;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* The Technical Math Panel Styling */
+        .math-panel {
+            width: 100%;
+            background-color: #111116;
+            border: 1px solid #222230;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: #39ff14; /* Matrix neon green */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            overflow-x: auto;
+            text-align: left;
+            line-height: 1.5;
+        }
+
+        .math-title {
+            color: #00ffcc;
+            font-weight: bold;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            border-bottom: 1px dashed #222230;
+            padding-bottom: 4px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: inherit;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        .btn-generate {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .btn-generate:hover {
+            background-color: #ddd;
+        }
+
+        .btn-download {
+            background-color: #161622;
+            color: #a5a5b5;
+            border: 1px solid #333344;
+        }
+
+        .btn-download:hover {
+            background-color: #222233;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="workspace">
+        <h1>ALGORITHMIC GEOMETRY</h1>
+        
+        <div class="canvas-container">
+            <canvas id="artCanvas" width="550" height="550"></canvas>
+        </div>
+        
+        <div class="math-panel">
+            <div class="math-title">// ALGORITHM MATRIX PARAMETERS</div>
+            <div id="mathSpecs">Initializing variables...</div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn-generate" onclick="generateArt()">Generate Art</button>
+            <button class="btn-download" onclick="downloadArt()">Save Canvas</button>
+        </div>
+    </div>
+
+    <script>
+        const PALETTES = [
+            { name: "Cyberpunk Neon", colors: ["#ff0055", "#00ffcc", "#9900ff", "#ff9900"] },
+            { name: "Oceanic Aura", colors: ["#11998e", "#38ef7d", "#00f2fe", "#4facfe"] },
+            { name: "Solar Flare", colors: ["#f12711", "#f5af19", "#e94057", "#8a2387"] },
+            { name: "Stark Bauhaus", colors: ["#000000", "#ffffff", "#888888", "#ff3333"] }
+        ];
+
+        function generateArt() {
+            const canvas = document.getElementById("artCanvas");
+            const ctx = canvas.getContext("2d");
+            const specsEl = document.getElementById("mathSpecs");
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 1. Roll the math dice for general parameters
+            const paletteObj = PALETTES[Math.floor(Math.random() * PALETTES.length)];
+            const palette = paletteObj.colors;
+            
+            const linesCount = 10 + Math.floor(Math.random() * 15);
+            const circlesCount = 15 + Math.floor(Math.random() * 20);
+            
+            const centerRadius = Math.floor(40 + Math.random() * 50);
+            const centerColor = palette[Math.floor(Math.random() * palette.length)];
+
+            // Fill canvas background
+            ctx.fillStyle = "#050508";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 2. Draw background line vectors
+            for(let i = 0; i < linesCount; i++) {
+                ctx.strokeStyle = palette[Math.floor(Math.random() * palette.length)];
+                ctx.lineWidth = (Math.random() * 1.5).toFixed(2);
+                ctx.globalAlpha = (Math.random() * 0.15).toFixed(2);
+                
+                ctx.beginPath();
+                ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.stroke();
+            }
+
+            // 3. Draw layered matrix circles
+            let ringCount = 0;
+            for (let i = 0; i < circlesCount; i++) {
+                const x = Math.floor(Math.random() * canvas.width);
+                const y = Math.floor(Math.random() * canvas.height);
+                const radius = Math.floor(15 + (Math.random() * 100));
+                
+                ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
+                ctx.globalAlpha = (0.1 + (Math.random() * 0.3)).toFixed(2);
+                
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Structural sharp rings
+                if(Math.random() < 0.35) {
+                    ctx.strokeStyle = "#ffffff";
+                    ctx.lineWidth = 1;
+                    ctx.globalAlpha = 0.15;
+                    ctx.stroke();
+                    ringCount++;
+                }
+            }
+
+            // 4. Draw Focal point center piece
+            ctx.fillStyle = centerColor;
+            ctx.globalAlpha = 0.85;
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, centerRadius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2;
+            ctx.globalAlpha = 0.4;
+            ctx.stroke();
+
+            // 5. INJECT LOGIC AND MATH METRICS INTO THE PANEL
+            specsEl.innerHTML = `
+                • <b>Active Palette:</b> ${paletteObj.name} <br>
+                • <b>Vector Arrays:</b> f(x) Line Count = ${linesCount}<br>
+                • <b>Probability Matrices:</b> Overlapping Spheres = ${circlesCount}<br>
+                • <b>Concentric Accents:</b> Perimeter Rings Generated = ${ringCount}<br>
+                • <b>Focal Domain:</b> Center Origin [X: 275, Y: 275]<br>
+                • <b>Focal Scale:</b> Area Bound Radius = ${centerRadius}px<br>
+                • <b>Focal Vector Color:</b> ${centerColor}<br>
+                • <b>Formula:</b> Dynamic Canvas Render 2D [${canvas.width}x${canvas.height}]
+            `;
+        }
+
+        function downloadArt() {
+            const canvas = document.getElementById("artCanvas");
+            const link = document.createElement('a');
+            link.download = 'algorithmic-art.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Run instantly on load
+        generateArt();
+    </script>
+</body>
+</html>
 
